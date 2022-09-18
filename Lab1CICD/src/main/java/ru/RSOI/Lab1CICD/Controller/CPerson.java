@@ -1,5 +1,7 @@
 package ru.RSOI.Lab1CICD.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,23 +9,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.RSOI.Lab1CICD.Error.EBadRequestError;
 import ru.RSOI.Lab1CICD.Error.ENotFoundError;
 import ru.RSOI.Lab1CICD.Model.MPerson;
+import ru.RSOI.Lab1CICD.Repos.RPerson;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/persons")
 public class CPerson {
 
-    private List<MPerson> personsList = new ArrayList<MPerson>() {{
-        add(new MPerson("Slava", 22, "Moscow", ""));
-    }};
+    @Autowired
+    private RPerson personRepo;
 
     @GetMapping("")
-    public List<MPerson> getAllPersons() {
-        return personsList;
+    public Iterable<MPerson> getAllPersons() {
+        return personRepo.findAll();
     }
 
     @GetMapping("/{id}")
@@ -37,12 +38,12 @@ public class CPerson {
     {
         MPerson person = new MPerson();
         fillValues(person, values);
-        personsList.add(person);
+        int newID = personRepo.save(person).getId();
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(person.getId()).toUri();
+                .buildAndExpand(newID).toUri();
 
         return  ResponseEntity.created(location).build();
     }
@@ -51,7 +52,14 @@ public class CPerson {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePerson(@PathVariable int id)
     {
-        personsList.removeIf(Person -> Person.getId() == id);
+        try
+        {
+            personRepo.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e)
+        {
+
+        }
     }
 
     @PatchMapping("/{id}")
@@ -59,15 +67,12 @@ public class CPerson {
     {
         MPerson person = findPerson(id);
         fillValues(person, values);
-        return person;
+        return personRepo.save(person);
     }
 
     private MPerson findPerson(int id)
     {
-        return  personsList.stream()
-                .filter(Person -> Person.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ENotFoundError("Person not found!"));
+        return personRepo.findById(id).orElseThrow(() -> new ENotFoundError("Person not found!"));
     }
 
     private MPerson fillValues(MPerson person, Map<String, String> values)

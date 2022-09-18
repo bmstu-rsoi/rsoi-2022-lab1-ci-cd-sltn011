@@ -1,9 +1,12 @@
 package ru.RSOI.Lab1CICD.Model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="persons")
 public class MPerson {
-
-    private static int idCounter = 1;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int    id = -1;
     public String name = "";
     public int    age = -1;
@@ -12,11 +15,10 @@ public class MPerson {
 
     public MPerson()
     {
-        this.id = assignId();
+
     }
     public MPerson(String name, int age, String address, String work)
     {
-        this.id      = assignId();
         this.name    = name;
         this.age     = age;
         this.address = address;
@@ -28,10 +30,4 @@ public class MPerson {
         return id;
     }
 
-    private static int assignId()
-    {
-        int newId = idCounter;
-        idCounter++;
-        return newId;
-    }
 }
