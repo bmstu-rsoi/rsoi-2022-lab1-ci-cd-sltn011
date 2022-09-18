@@ -40,11 +40,8 @@ public class CPerson {
         fillValues(person, values);
         int newID = personRepo.save(person).getId();
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newID).toUri();
-
+        String stringLocation = String.format("/api/v1/persons/%d", newID);
+        URI location = ServletUriComponentsBuilder.fromUriString(stringLocation).build().toUri();
         return  ResponseEntity.created(location).build();
     }
 
