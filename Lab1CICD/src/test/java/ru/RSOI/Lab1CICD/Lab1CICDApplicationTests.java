@@ -2,13 +2,16 @@ package ru.RSOI.Lab1CICD;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import ru.RSOI.Lab1CICD.Controller.CPerson;
 import ru.RSOI.Lab1CICD.Error.EBadRequestError;
 import ru.RSOI.Lab1CICD.Error.ENotFoundError;
-import ru.RSOI.Lab1CICD.Repos.RPerson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@TestPropertySource(locations="classpath:application-test.properties")
 class Lab1CICDApplicationTests {
 
+
 	@Autowired
-	public CPerson personController;
+	private MockMvc mockMvc;
+
+	@Autowired
+	private CPerson personController;
 
 	@Test
 	void testGetNonExisting()
