@@ -6,4 +6,5 @@ import ru.RSOI.Lab1CICD.Model.MPerson;
 
 @Repository
 public interface RPerson extends CrudRepository<MPerson, Integer> {
+    
 }
