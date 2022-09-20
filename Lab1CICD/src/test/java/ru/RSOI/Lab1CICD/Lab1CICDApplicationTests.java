@@ -7,6 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 class Lab1CICDApplicationTests {
 
 	@Test
+	void test()
+	{
+		assert(5 == 5);
+	}
+
+	@Test
 	void contextLoads() {
 	}
 
