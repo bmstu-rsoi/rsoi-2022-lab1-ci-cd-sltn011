@@ -19,8 +19,12 @@ import java.util.Map;
 @RequestMapping("/api/v1/persons")
 public class CPerson {
 
-    @Autowired
-    private RPerson personRepo;
+    private final RPerson personRepo;
+
+    public CPerson(RPerson personRepo)
+    {
+        this.personRepo = personRepo;
+    }
 
     @GetMapping("")
     public Iterable<MPerson> getAllPersons() {
