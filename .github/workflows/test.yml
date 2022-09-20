@@ -17,6 +17,8 @@ jobs:
         uses: stCarolas/setup-maven@v4.4
         with:
           maven-version: 3.8.6
+      - name: Build to jar
+        run: mvn -f Lab1CICD/pom.xml --batch-mode --update-snapshots package -Dmaven.test.skip=true
       - name: Send app to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
