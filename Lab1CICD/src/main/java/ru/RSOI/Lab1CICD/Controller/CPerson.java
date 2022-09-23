@@ -46,7 +46,7 @@ public class CPerson {
 
         String stringLocation = String.format("/api/v1/persons/%d", newID);
         URI location = ServletUriComponentsBuilder.fromUriString(stringLocation).build().toUri();
-        return  ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("/{id}")
