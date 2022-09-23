@@ -20,14 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource(locations="classpath:application-test.properties")
 class Lab1CICDApplicationTests {
-
-
-	@Autowired
-	private MockMvc mockMvc;
 
 	@Autowired
 	private CPerson personController;
